@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VERONICA.exe — Made by Tata</title>
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(180,155,100,.10), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,.05), transparent 30%),
+        #090908;
+    color: #f1eee7;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .07;
+    background-image:
+        linear-gradient(rgba(255,255,255,.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.15) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: linear-gradient(to bottom, black, transparent);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+        circle,
+        transparent 40%,
+        rgba(0,0,0,.55) 100%
+    );
+    z-index: 20;
+}
+
+/* =====================================================
+   COMMON
+===================================================== */
+
+.screen {
+    min-height: 100vh;
+    width: 100%;
+    display: none;
+    position: relative;
+    z-index: 2;
+}
+
+.screen.active {
+    display: flex;
+}
+
+button,
+a {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* =====================================================
+   INTRO
+===================================================== */
+
+#intro {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+}
+
+.intro-content {
+    width: min(900px, 100%);
+    animation: introAppear 1.5s ease forwards;
+}
+
+.eyebrow {
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: #a99b82;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+}
+
+.intro-title {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(55px, 11vw, 145px);
+    font-weight: 400;
+    line-height: .82;
+    letter-spacing: -5px;
+}
+
+.intro-subtitle {
+    margin-top: 22px;
+    font-size: clamp(13px, 2vw, 18px);
+    letter-spacing: 8px;
+    color: #aaa59c;
+}
+
+.intro-line {
+    width: 80px;
+    height: 1px;
+    background: #b9a57d;
+    margin: 42px auto;
+}
+
+.intro-small {
+    color: #77736b;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 35px;
+}
+
+.main-button {
+    border: 1px solid #8e7c5d;
+    background: transparent;
+    color: #f2eee5;
+    padding: 17px 36px;
+    letter-spacing: 3px;
+    font-size: 11px;
+    transition: .4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #f2eee5;
+    transform: translateY(100%);
+    transition: .4s ease;
+    z-index: -1;
+}
+
+.main-button:hover {
+    color: #0a0a09;
+}
+
+.main-button:hover::before {
+    transform: translateY(0);
+}
+
+/* =====================================================
+   GAME
+===================================================== */
+
+#game {
+    flex-direction: column;
+    padding: 25px;
+}
+
+.game-container {
+    width: min(1100px, 100%);
+    margin: auto;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.logo {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: #9d8b68;
+}
+
+.score-box {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #9d998f;
+}
+
+.score-box strong {
+    color: #eeeae1;
+    font-size: 15px;
+}
+
+/* =====================================================
+   LEVEL HEADER
+===================================================== */
+
+.level-header {
+    padding: 65px 0 35px;
+}
+
+.level-number {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #9d8b68;
+    margin-bottom: 15px;
+}
+
+.level-title {
+    font-family: Georgia, serif;
+    font-size: clamp(40px, 7vw, 75px);
+    font-weight: 400;
+}
+
+.level-description {
+    max-width: 560px;
+    color: #858178;
+    line-height: 1.8;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+/* =====================================================
+   LEVEL 1
+===================================================== */
+
+#level1 {
+    display: block;
+}
+
+.reaction-arena {
+    height: 420px;
+    border: 1px solid rgba(255,255,255,.12);
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at center, rgba(184,160,116,.08), transparent 45%),
+        rgba(255,255,255,.015);
+}
+
+.arena-info {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    color: #77736b;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.target {
+    width: 62px;
+    height: 62px;
+    border: 1px solid #c5ae7e;
+    border-radius: 50%;
+    position: absolute;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #d9c59a;
+    font-size: 10px;
+    letter-spacing: 1px;
+    box-shadow: 0 0 35px rgba(190,160,100,.12);
+    transition: transform .15s ease;
+}
+
+.target::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #cdb27b;
+    box-shadow: 0 0 15px #cdb27b;
+}
+
+.target:hover {
+    transform: scale(1.12);
+}
+
+.level-status {
+    text-align: center;
+    margin-top: 18px;
+    color: #77736b;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+/* =====================================================
+   LEVEL 2
+===================================================== */
+
+#level2 {
+    display: none;
+}
+
+.memory-grid {
+    width: min(600px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.memory-card {
+    aspect-ratio: 1;
+    border: 1px solid rgba(255,255,255,.13);
+    background: rgba(255,255,255,.025);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Georgia, serif;
+    font-size: 28px;
+    color: transparent;
+    transition: .35s ease;
+}
+
+.memory-card:hover {
+    border-color: #887653;
+}
+
+.memory-card.flipped,
+.memory-card.matched {
+    background: rgba(181,153,99,.12);
+    border-color: #a68e62;
+    color: #d9c69e;
+}
+
+.memory-card.matched {
+    opacity: .45;
+}
+
+.memory-note {
+    text-align: center;
+    color: #77736b;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-top: 20px;
+}
+
+/* =====================================================
+   LEVEL 3
+===================================================== */
+
+#level3 {
+    display: none;
+}
+
+.choice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    max-width: 800px;
+}
+
+.choice {
+    min-height: 150px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.025);
+    color: #eeeae2;
+    text-align: left;
+    padding: 25px;
+    transition: .4s ease;
+}
+
+.choice-number {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #9b8967;
+}
+
+.choice-text {
+    font-family: Georgia, serif;
+    font-size: 24px;
+    margin-top: 25px;
+}
+
+.choice:hover {
+    transform: translateY(-5px);
+    border-color: #9d8860;
+    background: rgba(174,145,91,.08);
+}
+
+.choice-result {
+    margin-top: 25px;
+    color: #9a958c;
+    min-height: 25px;
+    font-size: 13px;
+}
+
+/* =====================================================
+   FINAL
+===================================================== */
+
+#final {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+}
+
+.final-content {
+    width: min(750px, 100%);
+}
+
+.final-small {
+    color: #9d8b68;
+    letter-spacing: 5px;
+    font-size: 10px;
+    margin-bottom: 30px;
+}
+
+.final-title {
+    font-family: Georgia, serif;
+    font-size: clamp(50px, 10vw, 110px);
+    font-weight: 400;
+    line-height: .9;
+}
+
+.final-score {
+    margin-top: 30px;
+    color: #77736b;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+.reveal-button {
+    margin-top: 50px;
+}
+
+/* =====================================================
+   SECRET
+===================================================== */
+
+#secret {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+}
+
+.secret-content {
+    width: min(780px, 100%);
+}
+
+.secret-label {
+    font-size: 10px;
+    color: #9d8b68;
+    letter-spacing: 5px;
+    margin-bottom: 35px;
+}
+
+.secret-title {
+    font-family: Georgia, serif;
+    font-size: clamp(35px, 7vw, 75px);
+    font-weight: 400;
+    line-height: 1.05;
+}
+
+.secret-line {
+    width: 55px;
+    height: 1px;
+    background: #a38e68;
+    margin: 35px auto;
+}
+
+.secret-message {
+    color: #a29d94;
+    line-height: 2;
+    font-size: 14px;
+    max-width: 650px;
+    margin: auto;
+}
+
+.song-intro {
+    margin: 38px auto 0;
+    max-width: 650px;
+    color: #c5beb1;
+    line-height: 1.9;
+    font-size: 14px;
+}
+
+.song-title {
+    margin-top: 35px;
+    font-family: Georgia, serif;
+    font-size: 25px;
+    color: #ded3bd;
+}
+
+.signature {
+    margin-top: 30px;
+    font-family: Georgia, serif;
+    font-size: 19px;
+    color: #d3c2a0;
+}
+
+.youtube-button {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 17px 30px;
+    border: 1px solid #9d8760;
+    color: #eee9df;
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    transition: .4s ease;
+}
+
+.youtube-button:hover {
+    background: #eee9df;
+    color: #0a0a09;
+}
+
+.restart {
+    display: block;
+    margin: 25px auto 0;
+    background: none;
+    border: none;
+    color: #66625b;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.restart:hover {
+    color: #aaa49a;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translate(-50%, 20px);
+    background: #eeeae1;
+    color: #0a0a09;
+    padding: 12px 22px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    opacity: 0;
+    pointer-events: none;
+    transition: .4s ease;
+    z-index: 100;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+.fade-in {
+    animation: fadeIn .8s ease forwards;
+}
+
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+@keyframes introAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 650px) {
+
+    #game {
+        padding: 18px;
+    }
+
+    .level-header {
+        padding-top: 45px;
+    }
+
+    .reaction-arena {
+        height: 350px;
+    }
+
+    .memory-grid {
+        gap: 7px;
+    }
+
+    .memory-card {
+        font-size: 21px;
+    }
+
+    .choice-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .choice {
+        min-height: 120px;
+    }
+
+    .choice-text {
+        font-size: 20px;
+    }
+
+    .intro-title {
+        letter-spacing: -3px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     INTRO
+===================================================== -->
+
+<section id="intro" class="screen active">
+
+    <div class="intro-content">
+
+        <div class="eyebrow">
+            A GAME MADE FOR ONE PERSON
+        </div>
+
+        <h1 class="intro-title">
+            VERONICA
+        </h1>
+
+        <div class="intro-subtitle">
+            CEYRELL VALADIS
+        </div>
+
+        <div class="intro-line"></div>
+
+        <div class="intro-small">
+            A little game, made by Tata.
+        </div>
+
+        <button class="main-button" onclick="startGame()">
+            ENTER THE GAME
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     GAME
+===================================================== -->
+
+<section id="game" class="screen">
+
+    <div class="game-container">
+
+        <div class="topbar">
+
+            <div class="logo">
+                VERONICA<span>.exe</span>
+            </div>
+
+            <div class="score-box">
+                SCORE &nbsp;
+                <strong id="score">000</strong>
+            </div>
+
+        </div>
+
+
+        <!-- LEVEL 1 -->
+
+        <div id="level1">
+
+            <div class="level-header">
+
+                <div class="level-number">
+                    LEVEL 01 — REACTION
+                </div>
+
+                <h2 class="level-title">
+                    Catch the Moment.
+                </h2>
+
+                <p class="level-description">
+                    Ada sesuatu yang muncul di arena.
+                    Klik sebelum waktunya habis.
+                    Semakin cepat kamu menangkapnya,
+                    semakin tinggi skormu.
+                </p>
+
+            </div>
+
+
+            <div class="reaction-arena" id="arena">
+
+                <div class="arena-info">
+                    <span>REACTION TEST</span>
+                    <span id="timer">15.0 SEC</span>
+                </div>
+
+                <div class="target" id="target"></div>
+
+            </div>
+
+            <div class="level-status" id="reactionStatus">
+                GET READY...
+            </div>
+
+        </div>
+
+
+        <!-- LEVEL 2 -->
+
+        <div id="level2">
+
+            <div class="level-header">
+
+                <div class="level-number">
+                    LEVEL 02 — MEMORY
+                </div>
+
+                <h2 class="level-title">
+                    Don't Forget.
+                </h2>
+
+                <p class="level-description">
+                    Ada beberapa hal yang harus kamu ingat.
+                    Temukan semua pasangan simbol yang sama.
+                </p>
+
+            </div>
+
+            <div class="memory-grid" id="memoryGrid"></div>
+
+            <div class="memory-note">
+                FIND ALL 8 PAIRS
+            </div>
+
+        </div>
+
+
+        <!-- LEVEL 3 -->
+
+        <div id="level3">
+
+            <div class="level-header">
+
+                <div class="level-number">
+                    LEVEL 03 — ONE LAST CHOICE
+                </div>
+
+                <h2 class="level-title">
+                    Choose Carefully.
+                </h2>
+
+                <p class="level-description">
+                    Tidak ada jawaban yang benar atau salah.
+                    Pilih satu yang paling terasa seperti kamu.
+                </p>
+
+            </div>
+
+
+            <div class="choice-grid">
+
+                <button class="choice" onclick="chooseAnswer(this, 10)">
+                    <div class="choice-number">01</div>
+                    <div class="choice-text">
+                        Ketawa sampai lupa waktu.
+                    </div>
+                </button>
+
+                <button class="choice" onclick="chooseAnswer(this, 15)">
+                    <div class="choice-number">02</div>
+                    <div class="choice-text">
+                        Menyimpan momen kecil.
+                    </div>
+                </button>
+
+                <button class="choice" onclick="chooseAnswer(this, 20)">
+                    <div class="choice-number">03</div>
+                    <div class="choice-text">
+                        Pergi mencari cerita baru.
+                    </div>
+                </button>
+
+                <button class="choice" onclick="chooseAnswer(this, 25)">
+                    <div class="choice-number">04</div>
+                    <div class="choice-text">
+                        Mengingat semuanya.
+                    </div>
+                </button>
+
+            </div>
+
+            <div class="choice-result" id="choiceResult"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FINAL
+===================================================== -->
+
+<section id="final" class="screen">
+
+    <div class="final-content fade-in">
+
+        <div class="final-small">
+            GAME COMPLETE
+        </div>
+
+        <h2 class="final-title">
+            You made it.
+        </h2>
+
+        <div class="final-score">
+            FINAL SCORE — <strong id="finalScore">000</strong>
+        </div>
+
+        <button
+            class="main-button reveal-button"
+            onclick="openSecret()"
+        >
+            OPEN THE LAST MEMORY
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SECRET / SONG
+===================================================== -->
+
+<section id="secret" class="screen">
+
+    <div class="secret-content fade-in">
+
+        <div class="secret-label">
+            ONE LAST THING
+        </div>
+
+        <h2 class="secret-title">
+            For Veronica.
+        </h2>
+
+        <div class="secret-line"></div>
+
+        <p class="secret-message">
+
+            Kalau suatu hari nanti kita sudah jauh
+            dari masa sekarang, semoga masih ada
+            sedikit bagian dari semua ini yang kamu ingat.
+
+            <br><br>
+
+            Tentang ketawa yang nggak jelas,
+            cerita-cerita random,
+            hari-hari biasa yang ternyata
+            jadi berharga.
+
+            <br><br>
+
+            Dan tentang satu teman bernama Tata
+            yang pernah bikin satu game cuma buat kamu.
+
+        </p>
+
+
+        <!-- =================================================
+             SONG MESSAGE
+        ================================================= -->
+
+        <div class="song-title">
+            Kembang Perawan — Gita Gutawa
+        </div>
+
+        <p class="song-intro">
+
+            Aku pilih lagu ini bukan tanpa alasan.
+
+            <br><br>
+
+            Karena ini salah satu lagu favoritmu,
+            dan rasanya cerita di lagu ini juga
+            cukup relate sama dirimu.
+
+            <br><br>
+
+            Ada sesuatu dari lagu ini yang terasa
+            seperti menggambarkan kamu —
+            tentang masa muda, tentang bertumbuh,
+            tentang menjadi diri sendiri,
+            dan tentang fase hidup yang pelan-pelan
+            berubah tanpa kita sadari.
+
+            <br><br>
+
+            Mungkin nanti kamu akan berubah,
+            aku juga akan berubah,
+            dan banyak hal dalam hidup kita
+            pasti akan ikut berubah.
+
+            <br><br>
+
+            Tapi untuk sekarang,
+            aku cuma mau menyimpan satu momen kecil ini:
+
+            <br><br>
+
+            <strong>
+                sebuah game sederhana yang dibuat Tata,
+                khusus untuk Veronica.
+            </strong>
+
+        </p>
+
+
+        <div class="signature">
+            — Tata
+        </div>
+
+
+        <!-- DIRECT YOUTUBE LINK -->
+
+        <a
+            class="youtube-button"
+            href="https://www.youtube.com/watch?v=zZHgCMLcUrM"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            ♫ PLAY KEMBANG PERAWAN
+        </a>
+
+
+        <button
+            class="restart"
+            onclick="location.reload()"
+        >
+            PLAY AGAIN
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- TOAST -->
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let score = 0;
+
+const intro =
+    document.getElementById("intro");
+
+const game =
+    document.getElementById("game");
+
+const finalScreen =
+    document.getElementById("final");
+
+const secret =
+    document.getElementById("secret");
+
+const level1 =
+    document.getElementById("level1");
+
+const level2 =
+    document.getElementById("level2");
+
+const level3 =
+    document.getElementById("level3");
+
+const scoreDisplay =
+    document.getElementById("score");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const target =
+    document.getElementById("target");
+
+const arena =
+    document.getElementById("arena");
+
+const timerDisplay =
+    document.getElementById("timer");
+
+const reactionStatus =
+    document.getElementById("reactionStatus");
+
+let timeLeft = 15;
+let reactionTimer;
+let targetVisible = false;
+
+
+/* =====================================================
+   START GAME
+===================================================== */
+
+function startGame() {
+
+    intro.classList.remove("active");
+
+    setTimeout(() => {
+
+        game.classList.add("active");
+
+        startLevel1();
+
+    }, 500);
+
+}
+
+
+/* =====================================================
+   SCORE
+===================================================== */
+
+function addScore(points) {
+
+    score += points;
+
+    scoreDisplay.textContent =
+        String(score).padStart(3, "0");
+
+}
+
+
+/* =====================================================
+   LEVEL 1
+===================================================== */
+
+function startLevel1() {
+
+    level1.style.display = "block";
+    level2.style.display = "none";
+    level3.style.display = "none";
+
+    timeLeft = 15;
+
+    reactionStatus.textContent =
+        "CLICK THE CIRCLE WHEN IT APPEARS";
+
+    setTimeout(() => {
+
+        spawnTarget();
+
+        reactionTimer = setInterval(() => {
+
+            timeLeft -= .1;
+
+            timerDisplay.textContent =
+                timeLeft.toFixed(1) + " SEC";
+
+            if (timeLeft <= 0) {
+
+                clearInterval(reactionTimer);
+
+                target.style.display = "none";
+
+                reactionStatus.textContent =
+                    "TIME'S UP.";
+
+                setTimeout(() => {
+
+                    startLevel2();
+
+                }, 1200);
+
+            }
+
+        }, 100);
+
+    }, 1000);
+
+}
+
+
+/* =====================================================
+   TARGET
+===================================================== */
+
+function spawnTarget() {
+
+    if (timeLeft <= 0)
+        return;
+
+    targetVisible = true;
+
+    const arenaWidth =
+        arena.clientWidth;
+
+    const arenaHeight =
+        arena.clientHeight;
+
+    const x =
+        Math.random() *
+        (arenaWidth - 100) + 20;
+
+    const y =
+        Math.random() *
+        (arenaHeight - 120) + 60;
+
+    target.style.left =
+        x + "px";
+
+    target.style.top =
+        y + "px";
+
+    target.style.display =
+        "flex";
+
+}
+
+
+/* =====================================================
+   TARGET CLICK
+===================================================== */
+
+target.addEventListener("click", function(e) {
+
+    e.stopPropagation();
+
+    if (!targetVisible || timeLeft <= 0)
+        return;
+
+    targetVisible = false;
+
+    target.style.display = "none";
+
+    addScore(5);
+
+    showToast("+5 POINTS");
+
+    reactionStatus.textContent =
+        "GOOD. FIND THE NEXT ONE.";
+
+    setTimeout(() => {
+
+        spawnTarget();
+
+    }, 250);
+
+});
+
+
+/* =====================================================
+   MEMORY GAME
+===================================================== */
+
+const symbols = [
+    "✦",
+    "◇",
+    "○",
+    "△",
+    "□",
+    "✧",
+    "♢",
+    "☆"
+];
+
+let cards = [];
+let flippedCards = [];
+let matchedPairs = 0;
+let lockBoard = false;
+
+
+function startLevel2() {
+
+    level1.style.display = "none";
+    level2.style.display = "block";
+    level3.style.display = "none";
+
+    createMemoryGame();
+
+}
+
+
+function createMemoryGame() {
+
+    const grid =
+        document.getElementById("memoryGrid");
+
+    grid.innerHTML = "";
+
+    cards = [
+        ...symbols,
+        ...symbols
+    ];
+
+    cards.sort(() =>
+        Math.random() - .5
+    );
+
+    flippedCards = [];
+    matchedPairs = 0;
+    lockBoard = false;
+
+
+    cards.forEach((symbol, index) => {
+
+        const card =
+            document.createElement("button");
+
+        card.className =
+            "memory-card";
+
+        card.dataset.symbol =
+            symbol;
+
+        card.dataset.index =
+            index;
+
+        card.textContent =
+            symbol;
+
+        card.addEventListener(
+            "click",
+            () => flipCard(card)
+        );
+
+        grid.appendChild(card);
+
+    });
+
+
+    const allCards =
+        document.querySelectorAll(
+            ".memory-card"
+        );
+
+    allCards.forEach(card => {
+
+        card.classList.add("flipped");
+
+    });
+
+
+    setTimeout(() => {
+
+        allCards.forEach(card => {
+
+            card.classList.remove(
+                "flipped"
+            );
+
+        });
+
+    }, 1300);
+
+}
+
+
+/* =====================================================
+   FLIP CARD
+===================================================== */
+
+function flipCard(card) {
+
+    if (
+        lockBoard ||
+        card.classList.contains("flipped") ||
+        card.classList.contains("matched")
+    ) {
+        return;
+    }
+
+    card.classList.add("flipped");
+
+    flippedCards.push(card);
+
+    if (flippedCards.length === 2) {
+
+        checkMatch();
+
+    }
+
+}
+
+
+/* =====================================================
+   CHECK MATCH
+===================================================== */
+
+function checkMatch() {
+
+    lockBoard = true;
+
+    const first =
+        flippedCards[0];
+
+    const second =
+        flippedCards[1];
+
+    if (
+        first.dataset.symbol ===
+        second.dataset.symbol
+    ) {
+
+        first.classList.add("matched");
+
+        second.classList.add("matched");
+
+        matchedPairs++;
+
+        addScore(10);
+
+        showToast("+10 — MATCH");
+
+        flippedCards = [];
+
+        lockBoard = false;
+
+
+        if (
+            matchedPairs ===
+            symbols.length
+        ) {
+
+            setTimeout(() => {
+
+                startLevel3();
+
+            }, 900);
+
+        }
+
+    } else {
+
+        setTimeout(() => {
+
+            first.classList.remove(
+                "flipped"
+            );
+
+            second.classList.remove(
+                "flipped"
+            );
+
+            flippedCards = [];
+
+            lockBoard = false;
+
+        }, 700);
+
+    }
+
+}
+
+
+/* =====================================================
+   LEVEL 3
+===================================================== */
+
+function startLevel3() {
+
+    level1.style.display = "none";
+    level2.style.display = "none";
+    level3.style.display = "block";
+
+    document.getElementById(
+        "choiceResult"
+    ).textContent = "";
+
+}
+
+
+function chooseAnswer(button, points) {
+
+    const choices =
+        document.querySelectorAll(
+            ".choice"
+        );
+
+    choices.forEach(choice => {
+
+        choice.disabled = true;
+
+    });
+
+    button.style.borderColor =
+        "#b29a6e";
+
+    addScore(points);
+
+    document.getElementById(
+        "choiceResult"
+    ).textContent =
+        "Choice locked. +" +
+        points +
+        " points.";
+
+    showToast(
+        "CHOICE LOCKED"
+    );
+
+    setTimeout(() => {
+
+        finishGame();
+
+    }, 1300);
+
+}
+
+
+/* =====================================================
+   FINISH
+===================================================== */
+
+function finishGame() {
+
+    game.classList.remove(
+        "active"
+    );
+
+    setTimeout(() => {
+
+        finalScreen.classList.add(
+            "active"
+        );
+
+        finalScore.textContent =
+            String(score).padStart(
+                3,
+                "0"
+            );
+
+    }, 500);
+
+}
+
+
+/* =====================================================
+   SECRET
+===================================================== */
+
+function openSecret() {
+
+    finalScreen.classList.remove(
+        "active"
+    );
+
+    setTimeout(() => {
+
+        secret.classList.add(
+            "active"
+        );
+
+    }, 500);
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+    toast.textContent =
+        message;
+
+    toast.classList.add(
+        "show"
+    );
+
+    setTimeout(() => {
+
+        toast.classList.remove(
+            "show"
+        );
+
+    }, 900);
+
+}
+
+</script>
+
+</body>
+</html>
